@@ -668,6 +668,112 @@ body.dating-mode {
             font-size: 1em;
         }
 }
+
+/* ===== COMMON STICKY CATEGORY BUTTONS (for Dating & Relationship modes) ===== */
+.game-container .category-buttons {
+    order: -1;
+    position: sticky;
+    top: 65px;
+    padding: 10px 20px 15px; /* Combined padding for content */
+    z-index: 900;
+    margin-left: -20px;
+    margin-right: -20px;
+    margin-bottom: 20px;
+}
+
+body.dating-mode .game-container .category-buttons {
+    background: #fff5f7;
+}
+
+body.relationship-mode .game-container .category-buttons {
+    background: #fff0f0;
+}
+
+.game-container .category-buttons + .card,
+.game-container .card {
+    margin-top: 0;
+}
+
+@media (max-width: 768px) {
+    .game-container .category-buttons {
+        top: 55px;
+        padding: 10px 15px; /* Combined padding for content on mobile */
+        margin-bottom: 15px;
+        margin-left: -15px;
+        margin-right: -15px;
+    }
+}
+
+/* Ensure .game-container has flex properties for ordering */
+.game-container {
+    display: flex;
+    flex-direction: column;
+}
+
+
+/* ===== STRANGERS MODE (default game-mode) ===== */
+/* body.strangers-mode is not strictly necessary if .game-mode is used by JS,
+   but added for clarity and consistency with other modes */
+body.strangers-mode .nav-item.active,
+body.game-mode .nav-item.active { /* .game-mode might be added by JS for strangers */
+    color: #4285f4;
+}
+body.strangers-mode .nav-item.active::after,
+body.game-mode .nav-item.active::after {
+    background-color: #4285f4;
+}
+
+/* Card and Next button for Strangers are already default blue, but can be explicit */
+body.strangers-mode .card-face,
+body.game-mode .card-face { /* .strangers-mode class takes precedence if both are present */
+    background-color: #4285f4;
+    box-shadow: 0 4px 15px rgba(66, 133, 244, 0.3);
+}
+
+body.strangers-mode #next-btn,
+body.game-mode #next-btn {
+    background-color: #4285f4;
+    box-shadow: 0 4px 10px rgba(66, 133, 244, 0.3);
+}
+body.strangers-mode #next-btn:hover,
+body.game-mode #next-btn:hover {
+    background-color: #3367d6;
+}
+
+body.strangers-mode .counter,
+body.game-mode .counter {
+    color: #4285f4;
+}
+
+
+/* ===== FRIENDS MODE ===== */
+body.friends-mode .nav-item.active {
+    color: #34a853; /* Green */
+}
+body.friends-mode .nav-item.active::after {
+    background-color: #34a853; /* Green */
+}
+
+body.friends-mode .card-face {
+    background-color: #34a853; /* Green */
+    box-shadow: 0 4px 15px rgba(52, 168, 83, 0.3);
+}
+
+body.friends-mode #next-btn {
+    background-color: #34a853; /* Green */
+    color: white;
+    box-shadow: 0 4px 10px rgba(52, 168, 83, 0.3);
+}
+body.friends-mode #next-btn:hover {
+    background-color: #2d9249; /* Darker Green */
+}
+
+body.friends-mode .counter {
+    color: #34a853; /* Green */
+}
+
+/* Home logo for friends-mode is already defined later, ensure it's correct */
+/* Chat send button for friends-mode is already defined later */
 /* ===== CATEGORY BUTTONS POSITIONING ===== */
 .category-buttons {
     position: relative; /* Enables z-index */
