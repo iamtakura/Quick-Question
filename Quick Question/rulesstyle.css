@@ -1,0 +1,37 @@
+﻿/* Rules Page Styles */
+.rules-container {
+    background-color: #f9f9f9;
+    border-radius: 15px;
+    padding: 20px;
+    margin: 60px auto 20px; /* Increased top margin to raise content */
+    max-width: 600px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    color: #000000;
+    font-family: 'Fredoka One', cursive;
+    text-align: center; /* Center all text */
+}
+
+    .rules-container h2 {
+        font-family: 'Fredoka One', cursive;
+        color: #000000;
+        font-size: 1.5rem;
+        margin-bottom: 15px;
+    }
+
+    .rules-container p {
+        margin-bottom: 20px;
+        line-height: 1.6;
+    }
+
+    .rules-container ol {
+        display: inline-block; /* Allows centering of the list */
+        text-align: left; /* List items remain left-aligned */
+        margin: 20px auto; /* Centers the list */
+        padding-left: 30px; /* Adjusted for better centering */
+    }
+
+    .rules-container li {
+        margin-bottom: 05px;
+        line-height: 1.6;
+        text-align: left; /* Ensures bullet points align properly */
+    }

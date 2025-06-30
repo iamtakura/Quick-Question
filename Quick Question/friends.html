@@ -1,0 +1,47 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Friends Mode - Quick Question</title>
+    <link rel="stylesheet" href="friends_style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <a href="index.html" class="home-logo">QUICK QUESTION</a>
+        <nav>
+            <div class="nav-container">
+                <a href="game.html" class="nav-item">Strangers</a>
+                <a href="friends.html" class="nav-item active">Friends</a>
+                <a href="truth-dare.html" class="nav-item">Truth OR Dare</a>
+                <a href="dating.html" class="nav-item">Dating</a>
+                <a href="relationship.html" class="nav-item">Relationship</a>
+            </div>
+        </nav>
+    </header>
+
+    <div class="game-container">
+        <div class="card" id="question-card">
+            <div class="card-face card-front">
+                <p id="question-text">Loading questions...</p>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button id="next-btn">Next Question →</button>
+            <div class="counter">Question <span id="current-q">1</span>/10</div>
+        </div>
+    </div>
+    <div class="chat-container">
+        <div class="chat-box" id="chat-box">
+            <!-- Messages will appear here -->
+        </div>
+        <div class="chat-input-area">
+            <input type="text" id="chat-input" placeholder="Type your message...">
+            <button id="send-btn">Send</button>
+        </div>
+    </div>
+    <script src="friends_script.js" type="module"></script>
+</body>
+</html>

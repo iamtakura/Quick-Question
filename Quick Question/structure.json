@@ -1,0 +1,17 @@
+{
+  "friends": {
+    "rooms": {
+      "ABC123": {
+        "host": "Player1",
+        "players": {
+          "Player1": { "score": 0 },
+          "Player2": { "score": 0 }
+        },
+        "currentQuestion": "Question 1",
+        "messages": {
+          "msg1": { "sender": "Player1", "message": "Hi!" }
+        }
+      }
+    }
+  }
+}

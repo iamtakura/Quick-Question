@@ -1,0 +1,45 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Rules - Quick Question</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
+</head>
+<body class="rules-page">
+    <header>
+        <a href="index.html" class="home-logo">QUICK QUESTION</a>
+        <nav>
+            <div class="nav-container">
+                <a href="game.html" class="nav-item">Strangers</a>
+                <a href="friends.html" class="nav-item">Friends</a>
+                <a href="truth-dare.html" class="nav-item">Truth OR Dare</a>
+                <a href="dating.html" class="nav-item">Dating</a>
+                <a href="relationship.html" class="nav-item">Relationship</a>
+            </div>
+        </nav>
+    </header>
+
+    <div class="rules-container">
+        <h1>Game Rules</h1>
+        <p class="subtitle">Select a mode to view specific rules</p>
+
+        <div class="mode-buttons">
+            <button class="mode-btn blue-btn" data-mode="strangers">Strangers Mode</button>
+            <button class="mode-btn blue-btn" data-mode="friends">Friends Mode</button>
+            <button class="mode-btn blue-btn" data-mode="dating">Dating Mode</button>
+            <button class="mode-btn blue-btn" data-mode="relationship">Relationship Mode</button>
+            <button class="mode-btn red-btn" data-mode="truth-dare">Truth or Dare</button>
+        </div>
+
+        <div class="rules-dropdown" id="rules-content"></div>
+    </div>
+
+    <footer>
+        <p>© 2025 Theo Corp. All Rights Reserved.</p>
+    </footer>
+
+    <script src="rules.js"></script>
+</body>
+</html>
