@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dating Mode - Quick Question</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
+</head>
+<body class="dating-mode">
+    <header>
+        <a href="index.html" class="home-logo">QUICK QUESTION</a>
+        <nav>
+            <div class="nav-container">
+                <a href="game.html" class="nav-item">Strangers</a>
+                <a href="friends.html" class="nav-item">Friends</a>
+                <a href="truth-dare.html" class="nav-item">Truth OR Dare</a>
+                <a href="dating.html" class="nav-item active">Dating</a>
+                <a href="relationship.html" class="nav-item">Relationship</a>
+            </div>
+        </nav>
+    </header>
+
+    <div class="game-container">
+        <div class="card" id="question-card">
+            <div class="card-face card-front">
+                <p id="question-text">Let's get to know each other...</p>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button id="next-btn">Next Question ♡</button>
+            <div class="counter">Question <span id="current-q">1</span></div>
+        </div>
+    </div>
+
+    <div class="category-buttons">
+        <button class="category-btn active" data-category="all">
+            🌟 All Questions
+        </button>
+        <button class="category-btn" data-category="flirty">
+            💋 Flirty
+        </button>
+        <button class="category-btn" data-category="deep">
+            💙 Deep
+        </button>
+        <button class="category-btn" data-category="playful">
+            🎭 Playful
+        </button>
+    </div>
+    <div class="chat-container">
+        <div class="chat-box" id="chat-box">
+            <!-- Messages will appear here -->
+        </div>
+        <div class="chat-input-area">
+            <input type="text" id="chat-input" placeholder="Type your message...">
+            <button id="send-btn">Send</button>
+        </div>
+    </div>
+    <footer>
+        <p>© 2025 Theo Corp. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        // ===== Start of inlined dating.js content (excluding its initChat) =====
+        const datingQuestions = {
+            flirty: [
+                "What's your go-to flirty text to send someone?",
+                "How would you flirt with me across a crowded room?",
+                "What's your favorite cheesy pickup line?",
+                "What's something you find irresistibly attractive?",
+                "What's your favorite physical feature about yourself?",
+                "What's your idea of a perfect first kiss?",
+                "What outfit makes you feel most confident?"
+            ],
+            deep: [
+                "What does emotional intimacy mean to you?",
+                "What's your biggest relationship lesson learned?",
+                "How do you handle conflict in relationships?",
+                "What makes someone 'relationship material' to you?",
+                "What's something you're hoping to experience with a partner?",
+                "How do you show love without using words?",
+                "What's your definition of trust in a relationship?"
+            ],
+            playful: [
+                "Where would you take me on a surprise date?",
+                "What's your idea of a perfect lazy Sunday together?",
+                "Describe our imaginary weekend getaway",
+                "Where would you take me for a spontaneous adventure?",
+                "What's your favorite way to be comforted?",
+                "If we were characters in a rom-com, what would our meet-cute be?",
+                "What ridiculous couple costume would we wear?"
+            ],
+            all: []
+        };
+
+        datingQuestions.all = [...datingQuestions.flirty, ...datingQuestions.deep, ...datingQuestions.playful];
+
+        const questionElement = document.getElementById('question-text');
+        const counterElement = document.getElementById('current-q');
+        const nextButton = document.getElementById('next-btn'); // Used by dating game logic
+        const card = document.getElementById('question-card');
+        const categoryButtons = document.querySelectorAll('.category-btn');
+
+        let currentQuestions = [];
+        let currentQuestionIndex = 0;
+        let activeCategory = 'all';
+
+        function initGame() {
+            shuffleQuestions(activeCategory);
+            updateQuestion();
+            setupEventListeners();
+            window.addEventListener('scroll', handleScroll); // handleScroll defined below
+        }
+
+        function handleScroll() {
+            const header = document.querySelector('header');
+            if (header && window.scrollY > 10) {
+                header.classList.add('header-scrolled');
+            } else if (header) {
+                header.classList.remove('header-scrolled');
+            }
+        }
+
+        function shuffleQuestions(category) {
+            currentQuestions = [...(datingQuestions[category] || [])];
+            shuffleArray(currentQuestions);
+            activeCategory = category;
+            currentQuestionIndex = 0; // Reset index when category changes
+        }
+
+        function updateQuestion() {
+            if (questionElement && currentQuestions.length > 0) {
+                questionElement.textContent = currentQuestions[currentQuestionIndex];
+            }
+            if (counterElement) {
+                 // Ensure currentQuestions is not empty to avoid division by zero or NaN
+                const totalQuestions = currentQuestions.length > 0 ? currentQuestions.length : 1;
+                counterElement.textContent = `${currentQuestionIndex + 1}/${totalQuestions}`;
+            }
+        }
+
+        function showNextQuestion() {
+            if (card) card.classList.add('flip');
+
+            setTimeout(() => {
+                if (currentQuestions.length > 0) {
+                    currentQuestionIndex = (currentQuestionIndex + 1) % currentQuestions.length;
+                    if (currentQuestionIndex === 0 && currentQuestions.length > 0) { // Reshuffle if looped and not empty
+                         shuffleQuestions(activeCategory); // Reshuffle only if necessary
+                    }
+                } else {
+                    // Handle empty question set, maybe show a default message or disable next
+                    if(questionElement) questionElement.textContent = "No questions in this category.";
+                    currentQuestionIndex = 0; // Reset index
+                }
+
+                updateQuestion();
+                if (card) card.classList.remove('flip');
+                triggerRomanticEffect();
+            }, 300);
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function triggerRomanticEffect() {
+            if (card) {
+                card.style.animation = 'none';
+                void card.offsetWidth;
+                card.style.animation = 'pulse 0.8s';
+            }
+
+            if (Math.random() > 0.7 && card) {
+                createFloatingHeart(
+                    card.getBoundingClientRect().left + card.offsetWidth / 2,
+                    card.getBoundingClientRect().top
+                );
+            }
+        }
+
+        function createFloatingHeart(x, y) {
+            const heart = document.createElement('div');
+            heart.innerHTML = '❤️';
+            heart.style.position = 'fixed';
+            heart.style.left = `${x}px`;
+            heart.style.top = `${y}px`;
+            heart.style.color = '#ff6b8b';
+            heart.style.fontSize = `${Math.random() * 20 + 10}px`;
+            heart.style.opacity = '0.8';
+            heart.style.pointerEvents = 'none';
+            heart.style.zIndex = '9999';
+            heart.style.animation = `float-up ${Math.random() * 2 + 1}s forwards`;
+            heart.style.transform = `rotate(${Math.random() * 30 - 15}deg)`;
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 2000); // Increased timeout for visibility
+        }
+
+        function setupEventListeners() {
+            if (categoryButtons) {
+                categoryButtons.forEach(button => {
+                    button.addEventListener('click', () => {
+                        categoryButtons.forEach(btn => btn.classList.remove('active'));
+                        button.classList.add('active');
+                        button.style.animation = 'none';
+                        void button.offsetWidth;
+                        button.style.animation = 'heartBeat 0.8s';
+                        for (let i = 0; i < 3; i++) {
+                            setTimeout(() => createFloatingHeart(
+                                button.getBoundingClientRect().left + button.offsetWidth / 2,
+                                button.getBoundingClientRect().top
+                            ), i * 200);
+                        }
+                        const category = button.dataset.category;
+                        shuffleQuestions(category);
+                        updateQuestion(); // Update question immediately after shuffling
+                    });
+                });
+            }
+
+            if (nextButton) nextButton.addEventListener('click', showNextQuestion);
+
+            document.addEventListener('keydown', (e) => {
+                if (['ArrowRight', 'ArrowDown', ' '].includes(e.key)) {
+                    showNextQuestion();
+                }
+            });
+
+            document.addEventListener('mousemove', (e) => {
+                if (Math.random() > 0.98) createFloatingHeart(e.clientX, e.clientY);
+            });
+        }
+
+        // Ensure initGame is called after DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initGame);
+        } else {
+            initGame();
+        }
+
+        // Scroll handling for header (already part of initGame via setupEventListeners and handleScroll)
+        // This was duplicated in original dating.js, ensuring it's covered by initGame call.
+        // let lastScroll = 0; // This was global, better to scope if possible or ensure initGame handles it.
+        // window.addEventListener('scroll', () => { ... }); // This is now set up in initGame
+
+        // ===== End of inlined dating.js content =====
+    </script>
+
+    <script>
+        // ===== Server-based chat script (from game_v2.html) =====
+        // Configuration for testing
+        const sessionId = "datingSession789"; // Unique session ID for dating page
+        const sender = "UserDating";          // Example sender
+
+        const chatBox = document.getElementById('chat-box');
+        const chatInput = document.getElementById('chat-input');
+        const sendButton = document.getElementById('send-btn'); // Chat-specific send button
+
+        function fetchMessages() {
+            if (!chatBox) { console.error("Chat box not found for server chat."); return; }
+            fetch(`get-messages.php?session_id=${sessionId}`)
+                .then(res => {
+                    if (!res.ok) return res.text().then(text => { throw new Error(`HTTP error! status: ${res.status}, body: ${text}`); });
+                    const contentType = res.headers.get("content-type");
+                    if (contentType && contentType.indexOf("application/json") !== -1) return res.json();
+                    return res.text().then(text => { throw new Error(`Expected JSON, received ${contentType}. Body: ${text}`); });
+                })
+                .then(data => {
+                    chatBox.innerHTML = '';
+                    if (Array.isArray(data)) {
+                        data.forEach(msg => {
+                            const messageElement = document.createElement('div');
+                            messageElement.classList.add('msg');
+                            const senderElement = document.createElement('b');
+                            senderElement.textContent = (msg.sender || 'Unknown') + ': ';
+                            messageElement.appendChild(senderElement);
+                            messageElement.appendChild(document.createTextNode(msg.message || ''));
+                            chatBox.appendChild(messageElement);
+                        });
+                    } else if (data) console.warn("Received non-array data from fetchMessages:", data);
+                    chatBox.scrollTop = chatBox.scrollHeight;
+                })
+                .catch(error => {
+                    console.error('Error fetching messages:', error);
+                    const errorElement = document.createElement('div');
+                    errorElement.classList.add('msg', 'error');
+                    errorElement.textContent = 'Error loading messages.';
+                    if (chatBox) chatBox.appendChild(errorElement);
+                    if (chatBox) chatBox.scrollTop = chatBox.scrollHeight;
+                });
+        }
+
+        function sendMessage() {
+            if (!chatInput) { console.error("Chat input not found for server chat."); return; }
+            const msg = chatInput.value.trim();
+            if (msg === '') return;
+
+            fetch('send-message.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `session_id=${sessionId}&sender=${sender}&message=${encodeURIComponent(msg)}`
+            })
+            .then(response => {
+                if (response.ok) {
+                    chatInput.value = '';
+                    fetchMessages();
+                } else {
+                    response.text().then(text => {
+                        console.error('Error sending message:', response.status, response.statusText, text);
+                        alert(`Error sending message: ${response.statusText} - ${text}`);
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Network error sending message:', error);
+                alert('Network error sending message: ' + error.message);
+            });
+        }
+
+        function initServerChat() {
+            if (sendButton && chatInput && chatBox) {
+                sendButton.addEventListener('click', sendMessage);
+                chatInput.addEventListener('keypress', function (e) {
+                    if (e.key === 'Enter') { e.preventDefault(); sendMessage(); }
+                });
+                const messagePollingInterval = 1500;
+                setInterval(fetchMessages, messagePollingInterval);
+                fetchMessages();
+            } else {
+                console.error('Critical chat UI elements not found for server chat.');
+                 // Display error on page if possible
+                const errorDiv = document.createElement('div');
+                errorDiv.textContent = 'Server Chat components failed to load.';
+                errorDiv.style.color = 'red'; errorDiv.style.padding = '10px'; errorDiv.style.textAlign = 'center';
+                if(document.body) document.body.appendChild(errorDiv);
+            }
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initServerChat);
+        } else {
+            initServerChat();
+        }
+        // ===== End of server-based chat script =====
+    </script>
+</body>
+</html>

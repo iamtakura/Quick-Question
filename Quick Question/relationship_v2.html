@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relationship Mode - Quick Question</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
+</head>
+<body class="relationship-mode">
+    <header>
+        <a href="index.html" class="home-logo">QUICK QUESTION</a>
+        <nav>
+            <div class="nav-container">
+                <a href="game.html" class="nav-item">Strangers</a>
+                <a href="friends.html" class="nav-item">Friends</a>
+                <a href="truth-dare.html" class="nav-item">Truth OR Dare</a>
+                <a href="dating.html" class="nav-item">Dating</a>
+                <a href="relationship.html" class="nav-item active">Relationship</a>
+            </div>
+        </nav>
+    </header>
+
+    <div class="game-container">
+        <div class="category-buttons">
+            <button class="category-btn active" data-category="foundation">🌱 Foundation</button>
+            <button class="category-btn" data-category="connection">💞 Connection</button>
+            <button class="category-btn" data-category="intimacy">🔥 Intimacy</button>
+            <button class="category-btn" data-category="future">🌟 Future</button>
+        </div>
+
+        <div class="card" id="question-card">
+            <div class="card-face card-front">
+                <p id="question-text">Loading...</p>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button id="next-btn">Next Question ❤️</button>
+            <div class="counter">Question <span id="current-q">1</span>/15</div>
+        </div>
+    </div>
+    <div class="chat-container">
+        <div class="chat-box" id="chat-box">
+            <!-- Messages will appear here -->
+        </div>
+        <div class="chat-input-area">
+            <input type="text" id="chat-input" placeholder="Type your message...">
+            <button id="send-btn">Send</button>
+        </div>
+    </div>
+    <footer>
+        <p>© 2025 Theo Corp. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        // ===== Start of inlined relationship.js content (excluding its initChat) =====
+        const relationshipQuestions = {
+            foundation: [
+                "What's your love language and how can I better speak it?",
+                "What's your biggest relationship deal-breaker?",
+                "How do you prefer to apologize and receive apologies?",
+                "What's something you wish I understood about your past?",
+                "What's your attachment style (anxious/secure/avoidant)?",
+                "What's your favorite memory of us from early in our relationship?",
+                "What's something you're still learning about me?",
+                "What family traditions do you want to keep or change?",
+                "How do you define 'quality time' together?",
+                "What's something small I do that makes you feel loved?",
+                "What's your ideal way to spend a lazy Sunday together?",
+                "How can we better support each other's personal growth?",
+                "What's your favorite thing about our communication style?",
+                "What's something you thought about me that turned out to be wrong?",
+                "What's your favorite 'us' tradition we've created?"
+            ],
+            connection: [
+                "What's something you're afraid to tell me but think I should know?",
+                "What's your favorite non-physical way we connect?",
+                "What's something you wish we did more of together?",
+                "How do you feel our relationship has changed you as a person?",
+                "What's a childhood experience that still affects you today?",
+                "What's something you're proud of in our relationship?",
+                "What's your favorite way I comfort you when you're upset?",
+                "What's something you've learned about love from previous relationships?",
+                "What's a dream you've never shared with anyone else?",
+                "What's your favorite thing about how we handle conflicts?",
+                "What's something you miss from earlier in our relationship?",
+                "What's a fear you have about our future together?",
+                "What's something you wish you could experience for the first time again with me?",
+                "What's your favorite 'small moment' we've shared recently?",
+                "What's something you think we understand about each other that others don't?"
+            ],
+            intimacy: [
+                "What's your favorite memory of our physical intimacy?",
+                "What's something you're curious to try in our intimate life?",
+                "What's your ideal frequency for physical intimacy?",
+                "What's something that always puts you in the mood?",
+                "What's a non-sexual touch you love from me?",
+                "What's your favorite place I've ever kissed you?",
+                "What's something you find sexy that you think I don't know about?",
+                "What's your favorite thing to hear during intimate moments?",
+                "What's something that makes you feel most vulnerable with me?",
+                "What's your favorite time of day for intimacy and why?",
+                "What's a fantasy you've never shared with me?",
+                "What's something that makes you feel most desired?",
+                "What's your favorite piece of clothing I wear during intimate moments?",
+                "What's something you'd like me to initiate more often?",
+                "What's your favorite post-intimacy ritual with me?"
+            ],
+            future: [
+                "Where do you see us living in 5 years?",
+                "What's your ideal vision for our future family?",
+                "What financial goals should we prioritize together?",
+                "What's a dream vacation we should save for?",
+                "How do you envision dividing household responsibilities long-term?",
+                "What's your ideal work-life balance as a couple?",
+                "How should we handle aging parents in the future?",
+                "What values do you want to instill in our future children?",
+                "What's your ideal way to celebrate major anniversaries?",
+                "How do you want to grow old together?",
+                "What's a skill you'd like us to learn together?",
+                "How important is marriage to you and why?",
+                "What's your ideal retirement scenario for us?",
+                "How should we handle holidays with both families long-term?",
+                "What's something you hope never changes about our relationship?"
+            ]
+        };
+
+        // Combine all questions for 'All' category
+        relationshipQuestions.all = Object.values(relationshipQuestions).reduce((acc, val) => {
+            // Ensure 'val' is an array before trying to concat. If it's 'all' itself, skip.
+            if (Array.isArray(val)) return acc.concat(val);
+            return acc;
+        }, []);
+
+
+        const questionElementRel = document.getElementById('question-text');
+        const counterElementRel = document.getElementById('current-q');
+        const nextButtonRel = document.getElementById('next-btn'); // Game logic next button
+        const cardRel = document.getElementById('question-card');
+        const categoryButtonsRel = document.querySelectorAll('.category-btn');
+
+        let currentQuestionsRel = [];
+        let currentQuestionIndexRel = 0;
+        let activeCategoryRel = 'foundation'; // Default active category
+
+        function initGameRel() {
+            shuffleQuestionsRel(activeCategoryRel);
+            updateQuestionRel();
+            setupEventListenersRel();
+            createScoreDisplayRel();
+        }
+
+        function shuffleQuestionsRel(category) {
+            currentQuestionsRel = [...(relationshipQuestions[category] || [])];
+            shuffleArrayRel(currentQuestionsRel);
+            activeCategoryRel = category;
+            currentQuestionIndexRel = 0;
+        }
+
+        function updateQuestionRel() {
+            if (questionElementRel && currentQuestionsRel.length > 0) {
+                questionElementRel.textContent = currentQuestionsRel[currentQuestionIndexRel];
+            } else if (questionElementRel) {
+                 questionElementRel.textContent = "No questions available for this category.";
+            }
+             if (counterElementRel) {
+                const totalRel = currentQuestionsRel.length > 0 ? currentQuestionsRel.length : 1;
+                counterElementRel.textContent = `${currentQuestionIndexRel + 1}/${totalRel}`;
+            }
+        }
+
+        function showNextQuestionRel() {
+            if (cardRel) cardRel.classList.add('flip');
+            setTimeout(() => {
+                if(currentQuestionsRel.length > 0) {
+                    currentQuestionIndexRel = (currentQuestionIndexRel + 1) % currentQuestionsRel.length;
+                    // Only reshuffle if we've looped AND it's not the 'all' category which is pre-shuffled once.
+                    // Or if you always want to reshuffle on loop for dynamic categories:
+                    if (currentQuestionIndexRel === 0) { //  && activeCategoryRel !== 'all'
+                        shuffleQuestionsRel(activeCategoryRel);
+                    }
+                } else {
+                    // This case should ideally be handled by disabling next button or better UI
+                    if(questionElementRel) questionElementRel.textContent = "No more questions.";
+                    currentQuestionIndexRel = 0;
+                }
+                updateQuestionRel();
+                if (cardRel) cardRel.classList.remove('flip');
+                triggerRomanticEffectRel();
+            }, 300);
+        }
+
+        function triggerRomanticEffectRel() {
+            if (cardRel) {
+                cardRel.style.animation = 'none';
+                void cardRel.offsetWidth;
+                cardRel.style.animation = 'redPulse 0.8s';
+            }
+            if (Math.random() > 0.7) createFloatingHeartRel();
+        }
+
+        function createFloatingHeartRel() {
+            const heart = document.createElement('div');
+            heart.innerHTML = '❤️';
+            heart.style.position = 'fixed';
+            heart.style.left = `${Math.random() * 100}vw`;
+            heart.style.top = `-50px`;
+            heart.style.fontSize = `${Math.random() * 20 + 15}px`;
+            heart.style.opacity = '0.8';
+            heart.style.zIndex = '100';
+            heart.style.animation = `float-up ${Math.random() * 3 + 2}s linear forwards`;
+            heart.style.transform = `rotate(${Math.random() * 60 - 30}deg)`;
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 3000);
+        }
+
+        function setupCategoryButtonsRel() {
+            if (categoryButtonsRel) {
+                categoryButtonsRel.forEach(button => {
+                    button.addEventListener('click', () => {
+                        categoryButtonsRel.forEach(btn => btn.classList.remove('active'));
+                        button.classList.add('active');
+                        const category = button.dataset.category;
+                        shuffleQuestionsRel(category);
+                        updateQuestionRel(); // Update question display immediately
+                        if(cardRel) cardRel.style.animation = 'redPulse 0.8s';
+                        for (let i = 0; i < 3; i++) setTimeout(createFloatingHeartRel, i * 200);
+                    });
+                });
+            }
+        }
+
+        function createScoreDisplayRel() {
+            const scoreDisplay = document.createElement('div');
+            scoreDisplay.className = 'score-display';
+            scoreDisplay.innerHTML = `<span>🌱 0</span> | <span>💞 0</span> | <span>🔥 0</span> | <span>🌟 0</span>`;
+            const gameContainer = document.querySelector('.game-container');
+            if (gameContainer) gameContainer.prepend(scoreDisplay);
+        }
+
+        function shuffleArrayRel(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function setupEventListenersRel() {
+            if (nextButtonRel) nextButtonRel.addEventListener('click', showNextQuestionRel);
+            document.addEventListener('keydown', (e) => {
+                if (['ArrowRight', 'ArrowDown', ' '].includes(e.key)) showNextQuestionRel();
+            });
+            setupCategoryButtonsRel();
+            document.addEventListener('mousemove', (e) => {
+                if (Math.random() > 0.98) createFloatingHeartRel();
+            });
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initGameRel);
+        } else {
+            initGameRel();
+        }
+        // ===== End of inlined relationship.js content =====
+    </script>
+
+    <script>
+        // ===== Server-based chat script (from game_v2.html) =====
+        const sessionId = "relationshipSession101"; // Unique session ID
+        const sender = "UserRelationship";        // Example sender
+
+        const chatBox = document.getElementById('chat-box');
+        const chatInput = document.getElementById('chat-input');
+        const sendButton = document.getElementById('send-btn'); // Chat-specific send button
+
+        function fetchMessages() {
+            if (!chatBox) { console.error("Chat box not found for server chat."); return; }
+            fetch(`get-messages.php?session_id=${sessionId}`)
+                .then(res => {
+                    if (!res.ok) return res.text().then(text => { throw new Error(`HTTP error! status: ${res.status}, body: ${text}`); });
+                    const contentType = res.headers.get("content-type");
+                    if (contentType && contentType.indexOf("application/json") !== -1) return res.json();
+                    return res.text().then(text => { throw new Error(`Expected JSON, received ${contentType}. Body: ${text}`); });
+                })
+                .then(data => {
+                    chatBox.innerHTML = '';
+                    if (Array.isArray(data)) {
+                        data.forEach(msg => {
+                            const messageElement = document.createElement('div');
+                            messageElement.classList.add('msg');
+                            const senderElement = document.createElement('b');
+                            senderElement.textContent = (msg.sender || 'Unknown') + ': ';
+                            messageElement.appendChild(senderElement);
+                            messageElement.appendChild(document.createTextNode(msg.message || ''));
+                            chatBox.appendChild(messageElement);
+                        });
+                    } else if (data) console.warn("Received non-array data from fetchMessages:", data);
+                    chatBox.scrollTop = chatBox.scrollHeight;
+                })
+                .catch(error => {
+                    console.error('Error fetching messages:', error);
+                    const errorElement = document.createElement('div');
+                    errorElement.classList.add('msg', 'error');
+                    errorElement.textContent = 'Error loading messages.';
+                    if (chatBox) chatBox.appendChild(errorElement);
+                    if (chatBox) chatBox.scrollTop = chatBox.scrollHeight;
+                });
+        }
+
+        function sendMessage() {
+            if (!chatInput) { console.error("Chat input not found for server chat."); return; }
+            const msg = chatInput.value.trim();
+            if (msg === '') return;
+
+            fetch('send-message.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `session_id=${sessionId}&sender=${sender}&message=${encodeURIComponent(msg)}`
+            })
+            .then(response => {
+                if (response.ok) {
+                    chatInput.value = '';
+                    fetchMessages();
+                } else {
+                    response.text().then(text => {
+                        console.error('Error sending message:', response.status, response.statusText, text);
+                        alert(`Error sending message: ${response.statusText} - ${text}`);
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Network error sending message:', error);
+                alert('Network error sending message: ' + error.message);
+            });
+        }
+
+        function initServerChatRel() { // Renamed to avoid conflict if any global initChat exists
+            if (sendButton && chatInput && chatBox) {
+                sendButton.addEventListener('click', sendMessage);
+                chatInput.addEventListener('keypress', function (e) {
+                    if (e.key === 'Enter') { e.preventDefault(); sendMessage(); }
+                });
+                const messagePollingInterval = 1500;
+                setInterval(fetchMessages, messagePollingInterval);
+                fetchMessages();
+            } else {
+                console.error('Critical chat UI elements not found for server chat on relationship page.');
+                const errorDiv = document.createElement('div');
+                errorDiv.textContent = 'Server Chat components failed to load on relationship page.';
+                errorDiv.style.color = 'red'; errorDiv.style.padding = '10px'; errorDiv.style.textAlign = 'center';
+                if(document.body) document.body.appendChild(errorDiv);
+            }
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initServerChatRel);
+        } else {
+            initServerChatRel();
+        }
+        // ===== End of server-based chat script =====
+    </script>
+</body>
+</html>
