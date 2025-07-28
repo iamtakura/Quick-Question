@@ -1,4 +1,3 @@
-import { database, ref, push, set, onValue, update } from './firebase.js';
 let currentRoom = {}; // Track room state
 // DOM Elements
 const questionElement = document.getElementById('question-text');
@@ -60,6 +59,4 @@ function initChat() {
 
 // Wait for DOM to load
 document.addEventListener('DOMContentLoaded', initChat);
-
-// Start the game
-init();
+
