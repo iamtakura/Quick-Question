@@ -7,7 +7,6 @@
 The game presents users with questions tailored to different social contexts. Players can choose a category based on their relationship with others:
 
 *   **Strangers:** Light-hearted icebreakers designed to ease initial interactions.
-*   **Friends:** Fun and thought-provoking questions to discover new things about your pals.
 *   **Truth OR Dare:** Classic game with a mix of revealing questions and fun challenges.
 *   **Dating:** Questions to get to know a potential partner on a deeper level.
 *   **Relationship:** Prompts aimed at strengthening bonds and understanding within established relationships.
@@ -26,9 +25,9 @@ The game is built with HTML, CSS, and JavaScript, running directly in the browse
 The project is organized as follows:
 
 *   `index.html`: The main landing page.
-*   `modes.html` (or similar, e.g., `game.html`, `friends.html`): HTML pages for each game mode.
-*   `*.css` (e.g., `style.css`, `friends_style.css`): Stylesheets for visual presentation.
-*   `*.js` (e.g., `script.js`, `friends_script.js`): JavaScript files containing the game logic and interactivity.
+*   `modes.html` (or similar, e.g., `game.html`): HTML pages for each game mode.
+*   `*.css` (e.g., `style.css`): Stylesheets for visual presentation.
+*   `*.js` (e.g., `script.js`): JavaScript files containing the game logic and interactivity.
 *   `structure.json`: Likely contains the database of questions and game structure.
 *   `rules.html`: Explains the rules of the game.
 

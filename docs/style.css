@@ -746,34 +746,6 @@ body.game-mode .counter {
 }
 
 
-/* ===== FRIENDS MODE ===== */
-body.friends-mode .nav-item.active {
-    color: #34a853; /* Green */
-}
-body.friends-mode .nav-item.active::after {
-    background-color: #34a853; /* Green */
-}
-
-body.friends-mode .card-face {
-    background-color: #34a853; /* Green */
-    box-shadow: 0 4px 15px rgba(52, 168, 83, 0.3);
-}
-
-body.friends-mode #next-btn {
-    background-color: #34a853; /* Green */
-    color: white;
-    box-shadow: 0 4px 10px rgba(52, 168, 83, 0.3);
-}
-body.friends-mode #next-btn:hover {
-    background-color: #2d9249; /* Darker Green */
-}
-
-body.friends-mode .counter {
-    color: #34a853; /* Green */
-}
-
-/* Home logo for friends-mode is already defined later, ensure it's correct */
-/* Chat send button for friends-mode is already defined later */
 /* ===== CATEGORY BUTTONS POSITIONING ===== */
 .category-buttons {
     position: relative; /* Enables z-index */

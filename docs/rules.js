@@ -13,14 +13,6 @@
             warning: "🚫 No yes/no answers allowed! Explain your responses.",
             link: "game.html"
         },
-        friends: {
-            title: "Friends Mode Rules",
-            audience: "Perfect for: Close friends, friend groups, or teammates",
-            questions: "Questions will be: Personal but not too deep, fun revelations about your friendship",
-            instructions: "How to play:\n1. Answer honestly but keep it fun\n2. No judgment zone\n3. Elaborate on your answers",
-            warning: "🚫 Single-word answers will be punished with embarrassing follow-up questions!",
-            link: "friends.html"
-        },
         dating: {
             title: "Dating Mode Rules",
             audience: "Perfect for: New couples, people getting to know each other romantically",
